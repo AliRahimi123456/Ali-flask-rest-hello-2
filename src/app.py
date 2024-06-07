@@ -8,7 +8,8 @@ from flask_swagger import swagger
 from flask_cors import CORS
 from utils import APIException, generate_sitemap
 from admin import setup_admin
-from models import db, User
+from models import db, Person, Planet
+
 #from models import Person
 
 app = Flask(__name__)
@@ -35,15 +36,41 @@ def handle_invalid_usage(error):
 @app.route('/')
 def sitemap():
     return generate_sitemap(app)
+#routes for people of starwars
 
-@app.route('/user', methods=['GET'])
-def handle_hello():
+@app.route('/people', methods=['GET'])
+def get_people():
 
-    response_body = {
-        "msg": "Hello, this is your GET /user response "
-    }
+    response_body = Person.query.all()
+    response_body = list(map(lambda x: x.serialize(), response_body))
 
     return jsonify(response_body), 200
+
+@app.route('/planets', methods=['GET'])
+def get_planets():
+    response_body = Planet.query.all()
+    response_body = list(map(lambda x: x.serialize(), response_body))
+
+    return jsonify(response_body), 200
+
+
+@app.route('/people/<int:person_id>', methods=['GET'])
+def get_one_person(person_id):
+   single_person = Person.query.get(person_id) 
+   if single_person is None:
+       raise APIException(f"Person ID {person_id} not found.", status_code=404)
+   
+   return jsonify(single_person.serialize()), 200
+    
+    
+
+
+
+
+
+@app.route('/planets<int:planet_id>', methods=['GET'])
+def get_one_planet():
+    pass
 
 # this only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':
