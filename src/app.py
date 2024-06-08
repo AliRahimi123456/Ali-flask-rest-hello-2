@@ -68,9 +68,49 @@ def get_one_person(person_id):
 
 
 
-@app.route('/planets<int:planet_id>', methods=['GET'])
-def get_one_planet():
-    pass
+@app.route('/planets/<int:planet_id>', methods=['GET'])
+def get_one_planet(planet_id):
+    single_planet = Planet.query.get(planet_id)
+    if single_planet is None:
+        raise APIException(f"Planet ID {planet_id} not found.", status_code=404)
+    
+    return jsonify(single_planet.serialize()), 200
+
+
+    #users and favorites
+    @app.route('/users', methods=['GET'])
+    def get_all_users():
+        pass
+
+
+    @app.route('/users/<int:user_id>', methods=['GET'])
+    def get_one_users():
+        pass
+
+
+    @app.route('/users/<int:user_id>'/favorites,  methods=['GET'])
+    def get_one_user_favorites():
+        pass
+
+    @app.route('users/<int:user_id>/favorites/people/<int:people_id>', methods=['POST'])
+    def add_one_planet_to_favorites():
+        pass
+
+    @app.route('users/<int:user_id>/favorites/planets/<int:people_id>', methods=['POST'])
+    def add_one_planet_to_favorites():
+        pass
+
+    @app.route('users/<int:user_id>/favorites/planets/<int:people_id>', methods=['DELETE'])
+    def add_one_planet_to_favorites():
+        pass
+
+
+    @app.route('users/<int:user_id>/favorites/planets/<int:people_id>', methods=['DELTE'])
+    def add_one_planet_to_favorites():
+        pass
+  
+
+  
 
 # this only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':
